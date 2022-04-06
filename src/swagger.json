@@ -1,0 +1,152 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Atlas",
+        "description": "Essa e uma documentação sobre Atras API",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/users": {
+            "post": {
+                "tags": ["Users"],
+                "summary": "Cria um novo usuário",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": ["name", "email"],
+                                "type": "object",
+                                "properties": {
+                                    "admin": { "type": "boolean" },
+                                    "id": { "type": "string" },
+                                    "name": { "type": "string" },
+                                    "email": { "type": "string" },
+                                    "createAt": { "type": "string" },
+                                    "updateAt": { "type": "string" }
+
+                                },
+                                "example": {
+                                    "name": "Exemplo",
+                                    "email": "exemplo@gmail.com"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Operação realizada com sucesso.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "admin": { "type": "boolean" },
+                                        "id": { "type": "string" },
+                                        "name": { "type": "string" },
+                                        "email": { "type": "string" },
+                                        "createAt": { "type": "string" },
+                                        "updateAt": { "type": "string" }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Email já está sendo utilizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": { "type": "string" }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": ["Users"],
+                "summary": "Retorna todos os usuários.",
+                "description": "Somente usuario admin pode acessar",
+                "parameters": [{
+                    "in": "header",
+                    "name": "user_id",
+                    "required": true,
+                    "type": "string",
+                    "format": "uuid"
+                }],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            }
+        },
+        "/users/{user_id}": {
+            "get": {
+                "tags": ["Users"],
+                "summary": "Retorna um usuário especifico.",
+                "parameters": [{
+                    "in": "path",
+                    "name": "user_id",
+                    "required": true,
+                    "schema": {
+                        "type": "string",
+                        "format": "uuid"
+                    }
+
+
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Operação realizada com sucesso."
+                    },
+                    "404": {
+                        "description": "Usuário náo encontrado."
+                    }
+                }
+            }
+        },
+        "/users/{user_id}/admin": {
+            "patch": {
+                "tags": ["Users"],
+                "summary": "Torna admin um usuario",
+                "parameters": [{
+                    "in": "path",
+                    "name": "user_id",
+                    "required": true,
+                    "type": "string",
+                    "format": "uuid"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Operação realizada com sucesso."
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado."
+                    }
+                }
+            }
+        }
+    }
+}
